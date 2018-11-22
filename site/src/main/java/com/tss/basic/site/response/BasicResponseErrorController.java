@@ -1,4 +1,4 @@
-package com.tss.basic.site.autoconfigure;
+package com.tss.basic.site.response;
 
 import com.tss.basic.site.response.ErrorDataResponse;
 import org.springframework.beans.factory.annotation.Autowired;
