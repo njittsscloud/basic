@@ -1,6 +1,6 @@
 package com.tss.basic.site.advice;
 
-import com.tss.basic.site.converter.TSSJsonMessageConverter;
+import com.tss.basic.site.messageconverter.TSSInternalJsonMessageConverter;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -18,7 +18,7 @@ public class TSSResponseBodyAdvice implements ResponseBodyAdvice<Object> {
     
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-        return TSSJsonMessageConverter.class.isAssignableFrom(converterType);
+        return TSSInternalJsonMessageConverter.class.isAssignableFrom(converterType);
     }
 
     @Override

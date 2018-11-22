@@ -1,4 +1,4 @@
-package com.tss.basic.site.converter;
+package com.tss.basic.site.messageconverter;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
@@ -37,7 +37,7 @@ public class TSSJsonMessageConverter extends AbstractHttpMessageConverter<Object
 
     @Override
     protected Object readInternal(Class<?> clazz, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
-        return null;
+        return JSON.parseObject(inputMessage.getBody(), clazz);
     }
 
     @Override
