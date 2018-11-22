@@ -7,18 +7,28 @@ import com.tss.basic.site.response.DefaultResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.AbstractHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 /**
  * @author: MQG
  * @date: 2018/11/22
  */
 public class TSSJsonMessageConverter extends AbstractHttpMessageConverter<Object> {
+
+    private static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
+    
+    private static final MediaType SUPPORT_MEDIA_TYPE = new MediaType("application", "json", DEFAULT_CHARSET);
+    
+    public TSSJsonMessageConverter() {
+        super(SUPPORT_MEDIA_TYPE);
+    }
     
     @Override
     protected boolean supports(Class<?> clazz) {
