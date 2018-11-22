@@ -1,6 +1,8 @@
 package com.tss.basic.site.autoconfigure;
 
 import com.tss.basic.site.messageconverter.TSSInternalJsonMessageConverter;
+import com.tss.basic.site.messageconverter.TSSJsonMessageConverter;
+import com.tss.basic.site.messageconverter.TSSSwagger2MessageConverter;
 import com.tss.basic.site.response.BasicResponseErrorController;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -31,8 +33,8 @@ public class BasicSiteAutoConfiguration {
     @ConditionalOnWebApplication
     protected class MobApiMvcConfiguration extends WebMvcConfigurerAdapter {
         *//**
-         * 参数解析器
-         * *//*
+     * 参数解析器
+     * *//*
         @Override
         public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
             argumentResolvers.add(new JsonParamMethodArgumentResolver());
@@ -57,10 +59,10 @@ public class BasicSiteAutoConfiguration {
      */
     @Bean
     public HttpMessageConverters customConverters() {
-//        return new HttpMessageConverters(false,
-//                Arrays.asList(new TSSInternalJsonMessageConverter(), new TSSJsonMessageConverter()));
         return new HttpMessageConverters(false,
-                Arrays.asList(new TSSInternalJsonMessageConverter()));
+                Arrays.asList(new TSSSwagger2MessageConverter(),
+                        new TSSInternalJsonMessageConverter(),
+                        new TSSJsonMessageConverter()));
     }
 
 }

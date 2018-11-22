@@ -20,8 +20,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<springframework.version>4.3.20.RELEASE</springframework.version>
-		<springframework.boot.version>1.5.17.RELEASE</springframework.boot.version>
+		<springframework.version>4.3.19.RELEASE</springframework.version>
+		<springframework.boot.version>1.5.16.RELEASE</springframework.boot.version>
 	</properties>
 
 	<dependencies>
