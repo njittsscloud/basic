@@ -1,12 +1,9 @@
 package com.tss.basic.site.autoconfigure;
 
-import com.tss.basic.site.argumentresolver.JsonParamMethodArgumentResolver;
 import com.tss.basic.site.messageconverter.TSSInternalJsonMessageConverter;
-import com.tss.basic.site.messageconverter.TSSJsonMessageConverter;
 import com.tss.basic.site.response.BasicResponseErrorController;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.condition.SearchStrategy;
 import org.springframework.boot.autoconfigure.web.ErrorAttributes;
 import org.springframework.boot.autoconfigure.web.ErrorController;
@@ -15,11 +12,8 @@ import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * {@link org.springframework.boot.autoconfigure.EnableAutoConfiguration Auto-configuration}
@@ -33,18 +27,18 @@ import java.util.List;
 @AutoConfigureBefore(ErrorMvcAutoConfiguration.class)
 public class BasicSiteAutoConfiguration {
 
-    @Configuration
+   /* @Configuration
     @ConditionalOnWebApplication
     protected class MobApiMvcConfiguration extends WebMvcConfigurerAdapter {
-        /**
+        *//**
          * 参数解析器
-         * */
+         * *//*
         @Override
         public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
             argumentResolvers.add(new JsonParamMethodArgumentResolver());
         }
 
-    }
+    }*/
 
     /**
      * 统一异常处理
@@ -63,8 +57,10 @@ public class BasicSiteAutoConfiguration {
      */
     @Bean
     public HttpMessageConverters customConverters() {
+//        return new HttpMessageConverters(false,
+//                Arrays.asList(new TSSInternalJsonMessageConverter(), new TSSJsonMessageConverter()));
         return new HttpMessageConverters(false,
-                Arrays.asList(new TSSInternalJsonMessageConverter(), new TSSJsonMessageConverter()));
+                Arrays.asList(new TSSInternalJsonMessageConverter()));
     }
 
 }
