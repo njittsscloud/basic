@@ -95,7 +95,7 @@ public class JsonParamMethodArgumentResolver implements HandlerMethodArgumentRes
     
     private void validateRequired(JsonParam jsonParam, String json) {
         if (jsonParam.required() && StringUtils.isEmpty(json)) {
-            throw new ValidationInvalidParamException("参数不能为空", "参数不正确");
+            throw new ValidationInvalidParamException("", "参数不能为空");
         }
             
     }
