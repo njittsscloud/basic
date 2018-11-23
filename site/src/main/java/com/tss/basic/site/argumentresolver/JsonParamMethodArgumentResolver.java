@@ -1,10 +1,13 @@
 package com.tss.basic.site.argumentresolver;
 
 import com.alibaba.fastjson.JSON;
+import com.tss.basic.site.exception.ValidationInvalidParamException;
 import com.tss.basic.site.support.RequestUtil;
+import com.tss.basic.site.validation.ValidationResult;
+import com.tss.basic.site.validation.ValidationUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -21,7 +24,7 @@ import java.net.URLDecoder;
  * @date 2018/11/22
  */
 public class JsonParamMethodArgumentResolver implements HandlerMethodArgumentResolver {
-    
+
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
         return methodParameter.hasParameterAnnotation(JsonParam.class);
@@ -31,18 +34,22 @@ public class JsonParamMethodArgumentResolver implements HandlerMethodArgumentRes
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer,
                                   NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
         String json = this.getInput(nativeWebRequest, methodParameter);
+        
+        JsonParam jsonParam = methodParameter.getParameterAnnotation(JsonParam.class);
+        this.validateRequired(jsonParam, json);
         if (StringUtils.isEmpty(json)) {
-            return null;
+                return null;
         }
+        
         // 打个补丁支持key=v方式
         if (json.charAt(json.length() - 1) == '=') {
             json = json.substring(0, json.length() - 1);
         }
         Object o = JSON.parseObject(json, methodParameter.getGenericParameterType());//JsonParser.readJavaType(JsonParser.getJavaType(methodParameter.getGenericParameterType(), null), json);
 
-        JsonParam jsonParam = methodParameter.getParameterAnnotation(JsonParam.class);
+        // 校验
         if (jsonParam.validation()) {
-            // 暂无校验
+            ValidationUtils.validate(o);
         }
         return o;
     }
@@ -84,5 +91,12 @@ public class JsonParamMethodArgumentResolver implements HandlerMethodArgumentRes
         } else {
             return null;
         }
+    }
+    
+    private void validateRequired(JsonParam jsonParam, String json) {
+        if (jsonParam.required() && StringUtils.isEmpty(json)) {
+            throw new ValidationInvalidParamException("参数不能为空", "参数不正确");
+        }
+            
     }
 }

@@ -105,7 +105,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>5.2.3.Final</version>
+			<version>5.3.6.Final</version>
 		</dependency>
 		
 		<!-- junit -->
@@ -113,6 +113,7 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

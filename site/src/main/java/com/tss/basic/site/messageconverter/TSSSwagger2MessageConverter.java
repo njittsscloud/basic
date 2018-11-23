@@ -34,7 +34,7 @@ public class TSSSwagger2MessageConverter extends AbstractHttpMessageConverter<Ob
 
     @Override
     protected boolean supports(Class<?> clazz) {
-        return true;
+        return false;
     }
 
     @Override
