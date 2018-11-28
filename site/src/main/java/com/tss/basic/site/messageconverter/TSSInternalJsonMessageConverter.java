@@ -12,20 +12,23 @@ import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.AbstractHttpMessageConverter;
+import org.springframework.http.converter.GenericHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 
 /**
- * 内部系统调用使用的消息转换器
+ * 内部系统调用使用的消息转换器（只支持读取无@JsonParam注释的参数）
  * 
  * @author: MQG
  * @date: 2018/11/22
  */
-public class TSSInternalJsonMessageConverter extends AbstractHttpMessageConverter<Object> {
+public class TSSInternalJsonMessageConverter extends AbstractHttpMessageConverter<Object> implements GenericHttpMessageConverter<Object> {
     private static final Logger LOG = LoggerFactory.getLogger(TSSInternalJsonMessageConverter.class);
 
     private static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
@@ -53,25 +56,44 @@ public class TSSInternalJsonMessageConverter extends AbstractHttpMessageConverte
 
     @Override
     protected void writeInternal(Object obj, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
-        ByteArrayOutputStream outnew = new ByteArrayOutputStream();
-        try {
-            HttpHeaders headers = outputMessage.getHeaders();
+    }
+    
+    // GenericHttpMessageConverter实现
 
-            DefaultResponse response = new DefaultResponse();
-            response.setData(obj);
-            response.setErrorCode(DefaultResponse.OK_CODE);
-            response.setMsg("OK");
-            response.setSuccess(true);
+    @Override
+    public boolean canRead(Type type, Class<?> contextClass, MediaType mediaType) {
+        Class<?> clazz = this.getClass(type);
+        return clazz == null ? false : (clazz.getAnnotation(JsonParam.class) == null);
+    }
 
-            int len = JSON.writeJSONString(outnew, response, SerializerFeature.WriteMapNullValue);
-            headers.setContentLength(len);
-
-            outnew.writeTo(outputMessage.getBody());
-        } catch (JSONException ex) {
-            throw new HttpMessageNotWritableException("Could not write JSON: " + ex.getMessage(), ex);
-        } finally {
-            outnew.close();
+    @Override
+    public Object read(Type type, Class<?> contextClass, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
+        Class<?> clazz = this.getClass(type);
+        
+        DefaultResponse response = JSON.parseObject(inputMessage.getBody(), DefaultResponse.class);
+        if (response == null || !response.isSuccess() || response.getData() == null) {
+            throw new IOException(response == null ? "未知错误" : response.getMsg());
         }
+        return JSON.parseObject(JSON.toJSONString(response.getData()), clazz);
+    }
 
+    @Override
+    public boolean canWrite(Type type, Class<?> clazz, MediaType mediaType) {
+        return false;
+    }
+
+    @Override
+    public void write(Object obj, Type type, MediaType contentType, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
+    }
+    
+    private Class<?> getClass(Type type) {
+        Class<?> clazz = null;
+        if (type instanceof Class) {
+            clazz = (Class) type;
+        } else if (type instanceof ParameterizedTypeImpl) {
+            ParameterizedTypeImpl pType = (ParameterizedTypeImpl) type;
+            clazz = pType.getRawType();
+        }
+        return clazz;
     }
 }
