@@ -3,23 +3,26 @@ package com.tss.basic.site.messageconverter;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.tss.basic.site.argumentresolver.JsonParam;
+import com.tss.basic.site.response.DefaultResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.AbstractHttpMessageConverter;
+import org.springframework.http.converter.AbstractGenericHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 
 /**
  * @author: MQG
  * @date: 2018/11/22
  */
-public class TSSJsonMessageConverter extends AbstractHttpMessageConverter<Object> {
+public class TSSJsonMessageConverter extends AbstractGenericHttpMessageConverter<Object> {
 
     private static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
 
@@ -31,7 +34,12 @@ public class TSSJsonMessageConverter extends AbstractHttpMessageConverter<Object
 
     @Override
     protected boolean supports(Class<?> clazz) {
-        return true;
+        return clazz.getAnnotation(JsonParam.class) != null;
+    }
+
+    @Override
+    public boolean canRead(Type type, Class<?> contextClass, MediaType mediaType) {
+        return (type instanceof Class) && ((Class) type).getAnnotation(JsonParam.class) != null;
     }
 
     @Override
@@ -40,20 +48,18 @@ public class TSSJsonMessageConverter extends AbstractHttpMessageConverter<Object
     }
 
     @Override
-    protected void writeInternal(Object obj, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
-        ByteArrayOutputStream outnew = new ByteArrayOutputStream();
-        try {
-            HttpHeaders headers = outputMessage.getHeaders();
-
-            int len = JSON.writeJSONString(outnew, obj, SerializerFeature.WriteMapNullValue);
-            headers.setContentLength(len);
-
-            outnew.writeTo(outputMessage.getBody());
-        } catch (JSONException ex) {
-            throw new HttpMessageNotWritableException("Could not write JSON: " + ex.getMessage(), ex);
-        } finally {
-            outnew.close();
-        }
+    public Object read(Type type, Class<?> contextClass, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
+        return JSON.parseObject(inputMessage.getBody(), (Class) type);
     }
+
+    @Override
+    public boolean canWrite(Type type, Class<?> clazz, MediaType mediaType) {
+        return false;
+    }
+
+    @Override
+    protected void writeInternal(Object obj, Type type, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
+    }
+
 
 }

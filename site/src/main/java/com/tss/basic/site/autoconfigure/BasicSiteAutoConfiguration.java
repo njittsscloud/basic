@@ -1,5 +1,6 @@
 package com.tss.basic.site.autoconfigure;
 
+import com.tss.basic.site.argumentresolver.InternalJsonParamMethodArgumentResolver;
 import com.tss.basic.site.argumentresolver.JsonParamMethodArgumentResolver;
 import com.tss.basic.site.messageconverter.TSSInternalJsonMessageConverter;
 import com.tss.basic.site.messageconverter.TSSJsonMessageConverter;
@@ -37,13 +38,14 @@ public class BasicSiteAutoConfiguration {
     @Configuration
     @ConditionalOnWebApplication
     protected class MobApiMvcConfiguration extends WebMvcConfigurerAdapter {
-        
-        /* *
+
+        /**
          * 参数解析器
-         * */
+         */
         @Override
         public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
             argumentResolvers.add(new JsonParamMethodArgumentResolver());
+            argumentResolvers.add(new InternalJsonParamMethodArgumentResolver());
         }
 
     }
@@ -67,8 +69,8 @@ public class BasicSiteAutoConfiguration {
     public HttpMessageConverters customConverters() {
         return new HttpMessageConverters(false,
                 Arrays.asList(new TSSSwagger2MessageConverter(),
-                        new TSSInternalJsonMessageConverter(),
-                        new TSSJsonMessageConverter()));
+                        new TSSJsonMessageConverter(),
+                        new TSSInternalJsonMessageConverter()));
     }
 
 }

@@ -44,19 +44,6 @@ public class TSSSwagger2MessageConverter extends AbstractHttpMessageConverter<Ob
 
     @Override
     protected void writeInternal(Object obj, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
-        ByteArrayOutputStream outnew = new ByteArrayOutputStream();
-        try {
-            HttpHeaders headers = outputMessage.getHeaders();
-
-            int len = JSON.writeJSONString(outnew, obj, SerializerFeature.WriteMapNullValue);
-            headers.setContentLength(len);
-
-            outnew.writeTo(outputMessage.getBody());
-        } catch (JSONException ex) {
-            throw new HttpMessageNotWritableException("Could not write JSON: " + ex.getMessage(), ex);
-        } finally {
-            outnew.close();
-        }
     }
 
     @Override
