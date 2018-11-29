@@ -1,7 +1,6 @@
 package com.tss.basic.site.argumentresolver;
 
 import com.alibaba.fastjson.JSON;
-import com.github.pagehelper.PageInfo;
 import com.tss.basic.site.exception.ValidationInvalidParamException;
 import com.tss.basic.site.response.DefaultResponse;
 import com.tss.basic.site.support.RequestUtil;
@@ -16,7 +15,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.lang.reflect.Type;
 import java.net.URLDecoder;
 
 /**

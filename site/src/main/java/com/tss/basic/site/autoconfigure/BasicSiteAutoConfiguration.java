@@ -6,6 +6,9 @@ import com.tss.basic.site.messageconverter.TSSInternalJsonMessageConverter;
 import com.tss.basic.site.messageconverter.TSSJsonMessageConverter;
 import com.tss.basic.site.messageconverter.TSSSwagger2MessageConverter;
 import com.tss.basic.site.response.BasicResponseErrorController;
+import com.tss.basic.site.user.argumentresolver.StudentUserMethodArgumentResolver;
+import com.tss.basic.site.user.processor.StudentCookieProcessor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -24,9 +27,6 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * {@link org.springframework.boot.autoconfigure.EnableAutoConfiguration Auto-configuration}
- * APP/M站接口请求参数数据格式的封装，自动完成JSON的编码解码
- *
  * @author MQG
  * @date 2018/11/22
  */
@@ -34,6 +34,9 @@ import java.util.List;
 @ComponentScan("com.tss.basic.site")
 @AutoConfigureBefore(ErrorMvcAutoConfiguration.class)
 public class BasicSiteAutoConfiguration {
+
+    @Autowired
+    private StudentCookieProcessor retailCookieProcessor;
 
     @Configuration
     @ConditionalOnWebApplication
@@ -46,6 +49,7 @@ public class BasicSiteAutoConfiguration {
         public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
             argumentResolvers.add(new JsonParamMethodArgumentResolver());
             argumentResolvers.add(new InternalJsonParamMethodArgumentResolver());
+            argumentResolvers.add(new StudentUserMethodArgumentResolver(retailCookieProcessor));
         }
 
     }
