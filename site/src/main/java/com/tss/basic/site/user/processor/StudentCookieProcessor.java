@@ -46,7 +46,7 @@ public class StudentCookieProcessor extends AbstractCookieProcessor {
         StudentLoginUser studentLoginUser = parameter.getContainingClass().getAnnotation(StudentLoginUser.class);
         if (studentLoginUser != null && parameter.getParameterType().equals(StudentUser.class)) {
             DefaultResponse<StudentUser> response = HttpManager.getLoginUserInfo(studentConfig.getInfoUrl(), cookieItem, type, null);
-            if (response == null || !response.isSuccess()) {
+            if (response == null || !response.isSuccess() || response.getData() == null) {
                 LOG.info("student user not login, {}", cookieItem);
                 return null;
             } else {

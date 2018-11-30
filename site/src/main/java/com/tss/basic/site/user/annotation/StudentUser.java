@@ -11,49 +11,67 @@ public class StudentUser extends AbstractUser {
         return UserTypeEnum.STUDENT.getValue();
     }
 
-    private long retailId;
-    private String retailName;
-    private long parentId;
-    private String path;
-    private boolean isRoot;
+    private long studentId;
+    private String studentName;
+    private String studentNo;
+    private long classId;
+    private String className;
+    private long academicId;
+    private String academicName;
 
-    public String getRetailName() {
-        return retailName;
+    public long getStudentId() {
+        return studentId;
     }
 
-    public void setRetailName(String retailName) {
-        this.retailName = retailName;
+    public void setStudentId(long studentId) {
+        this.studentId = studentId;
     }
 
-    public long getRetailId() {
-        return retailId;
+    public String getStudentName() {
+        return studentName;
     }
 
-    public void setRetailId(long retailId) {
-        this.retailId = retailId;
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
     }
 
-    public long getParentId() {
-        return parentId;
+    public String getStudentNo() {
+        return studentNo;
     }
 
-    public void setParentId(long parentId) {
-        this.parentId = parentId;
+    public void setStudentNo(String studentNo) {
+        this.studentNo = studentNo;
     }
 
-    public boolean isRoot() {
-        return isRoot;
+    public long getClassId() {
+        return classId;
     }
 
-    public void setRoot(boolean root) {
-        isRoot = root;
+    public void setClassId(long classId) {
+        this.classId = classId;
     }
 
-    public String getPath() {
-        return path;
+    public String getClassName() {
+        return className;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public long getAcademicId() {
+        return academicId;
+    }
+
+    public void setAcademicId(long academicId) {
+        this.academicId = academicId;
+    }
+
+    public String getAcademicName() {
+        return academicName;
+    }
+
+    public void setAcademicName(String academicName) {
+        this.academicName = academicName;
     }
 }
