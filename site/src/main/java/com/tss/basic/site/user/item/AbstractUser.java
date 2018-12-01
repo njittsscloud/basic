@@ -11,21 +11,9 @@ public abstract class AbstractUser {
 
     protected List<CookieItem> coolies;
 
-    protected boolean god;
-
     protected long userId;
 
     protected String userName;
-
-    protected String name;
-
-    public boolean isGod() {
-        return god;
-    }
-
-    public void setGod(boolean god) {
-        this.god = god;
-    }
 
     public long getUserId() {
         return userId;
@@ -51,14 +39,6 @@ public abstract class AbstractUser {
 
     public void setCookieItem(CookieItem cookieItem) {
         this.cookieItem = cookieItem;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public List<CookieItem> getCoolies() {

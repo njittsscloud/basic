@@ -3,7 +3,8 @@ package com.tss.basic.site.user.annotation;
 import com.tss.basic.site.user.item.AbstractUser;
 
 /**
- * Created by lzm on 2017/8/21.
+ * @author MQG
+ * @date 2018/12/02
  */
 public class StudentUser extends AbstractUser {
     @Override
