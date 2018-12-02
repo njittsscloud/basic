@@ -3,6 +3,7 @@ package com.tss.basic.site.messageconverter;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.tss.basic.site.exception.BusinessException;
 import com.tss.basic.site.response.DefaultResponse;
 import com.tss.basic.site.response.ErrorDataResponse;
 import org.slf4j.Logger;
@@ -59,7 +60,7 @@ public class TSSInternalJsonMessageConverter extends AbstractGenericHttpMessageC
 
         DefaultResponse response = JSON.parseObject(inputMessage.getBody(), DefaultResponse.class);
         if (response == null || !response.isSuccess() || response.getData() == null) {
-            throw new IOException(response == null ? "未知错误" : response.getMsg());
+            throw new BusinessException(response == null ? "未知错误" : response.getMsg());
         }
         return JSON.parseObject(JSON.toJSONString(response.getData()), clazz);
     }
