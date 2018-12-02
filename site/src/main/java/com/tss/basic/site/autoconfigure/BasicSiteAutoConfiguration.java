@@ -7,7 +7,9 @@ import com.tss.basic.site.messageconverter.TSSJsonMessageConverter;
 import com.tss.basic.site.messageconverter.TSSSwagger2MessageConverter;
 import com.tss.basic.site.response.BasicResponseErrorController;
 import com.tss.basic.site.user.argumentresolver.StudentUserMethodArgumentResolver;
+import com.tss.basic.site.user.argumentresolver.TeacherUserMethodArgumentResolver;
 import com.tss.basic.site.user.processor.StudentCookieProcessor;
+import com.tss.basic.site.user.processor.TeacherCookieProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -36,7 +38,9 @@ import java.util.List;
 public class BasicSiteAutoConfiguration {
 
     @Autowired
-    private StudentCookieProcessor retailCookieProcessor;
+    private StudentCookieProcessor studentCookieProcessor;
+    @Autowired
+    private TeacherCookieProcessor teacherCookieProcessor;
 
     @Configuration
     @ConditionalOnWebApplication
@@ -49,7 +53,8 @@ public class BasicSiteAutoConfiguration {
         public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
             argumentResolvers.add(new JsonParamMethodArgumentResolver());
             argumentResolvers.add(new InternalJsonParamMethodArgumentResolver());
-            argumentResolvers.add(new StudentUserMethodArgumentResolver(retailCookieProcessor));
+            argumentResolvers.add(new StudentUserMethodArgumentResolver(studentCookieProcessor));
+            argumentResolvers.add(new TeacherUserMethodArgumentResolver(teacherCookieProcessor));
         }
 
     }
