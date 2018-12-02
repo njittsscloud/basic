@@ -1,7 +1,7 @@
 package com.tss.basic.site.user.argumentresolver;
 
-import com.tss.basic.site.user.annotation.StudentUser;
 import com.tss.basic.site.user.annotation.TeacherLoginUser;
+import com.tss.basic.site.user.annotation.TeacherUser;
 import com.tss.basic.site.user.processor.AbstractCookieProcessor;
 import com.tss.basic.site.user.processor.TeacherCookieProcessor;
 import org.springframework.core.MethodParameter;
@@ -24,7 +24,7 @@ public class TeacherUserMethodArgumentResolver extends AbstractUserMethodArgumen
 
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
-        return methodParameter.getParameterType().equals(StudentUser.class);
+        return methodParameter.getParameterType().equals(TeacherUser.class);
     }
 
     @Override
