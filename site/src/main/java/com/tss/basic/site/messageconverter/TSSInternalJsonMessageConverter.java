@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.tss.basic.site.response.DefaultResponse;
+import com.tss.basic.site.response.ErrorDataResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -74,14 +75,18 @@ public class TSSInternalJsonMessageConverter extends AbstractGenericHttpMessageC
         try {
             HttpHeaders headers = outputMessage.getHeaders();
 
-            DefaultResponse<Object> response = new DefaultResponse<>();
-            response.setSuccess(true);
-            response.setMsg("success");
-            response.setErrorCode(DefaultResponse.OK_CODE);
-            response.setData(obj);
-            int len = JSON.writeJSONString(outnew, response, SerializerFeature.WriteMapNullValue);
-            headers.setContentLength(len);
-
+            if (obj instanceof ErrorDataResponse) {
+                int len = JSON.writeJSONString(outnew, obj, SerializerFeature.WriteMapNullValue);
+                headers.setContentLength(len);
+            } else {
+                DefaultResponse<Object> response = new DefaultResponse<>();
+                response.setSuccess(true);
+                response.setMsg("success");
+                response.setErrorCode(DefaultResponse.OK_CODE);
+                response.setData(obj);
+                int len = JSON.writeJSONString(outnew, response, SerializerFeature.WriteMapNullValue);
+                headers.setContentLength(len);
+            }
             outnew.writeTo(outputMessage.getBody());
         } catch (JSONException ex) {
             throw new HttpMessageNotWritableException("Could not write JSON: " + ex.getMessage(), ex);
