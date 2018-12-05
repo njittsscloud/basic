@@ -8,7 +8,7 @@ public enum CookieName {
     STUDENT("studentsid", "学生用户登录session id"),
     TEACHER("teachersid", "教师用户登录session id"),
     SYY("syysid", "实验员用户登录session id"),
-    ADMIn("adminsid", "管理员用户登录session id");
+    ADMIN("adminsid", "管理员用户登录session id");
 
     String cookieName;
     String desc;
