@@ -55,9 +55,9 @@ public abstract class AbstractUserMethodArgumentResolver implements HandlerMetho
                     throw new UserNotLoginException();
                 }
             }
-            if (!isSessionId(cookieItem.getValue())) {
-                throw new UserNotLoginException();
-            }
+            // if (!isSessionId(cookieItem.getValue())) {
+            //    throw new UserNotLoginException();
+            // }
             Object data = getCookieProcessor().getLoginUserInfo(cookieItem, parameter);
             if (data == null) {
                 throw new UserNotLoginException();

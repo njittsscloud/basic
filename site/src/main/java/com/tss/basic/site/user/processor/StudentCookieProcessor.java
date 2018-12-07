@@ -38,7 +38,7 @@ public class StudentCookieProcessor extends AbstractCookieProcessor {
 
     @Override
     public String getCookieName() {
-        return CookieName.STUDENT.getCookieName();
+         return CookieName.ACCESS_TOKEN.getCookieName();
     }
 
     @Override
