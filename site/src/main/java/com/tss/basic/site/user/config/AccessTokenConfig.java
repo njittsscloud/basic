@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  */
 @Primary
 @Component
-@ConfigurationProperties(prefix = "user.access-token")
+@ConfigurationProperties(prefix = "user.auth")
 public class AccessTokenConfig {
     private String infoUrl = "";
 
