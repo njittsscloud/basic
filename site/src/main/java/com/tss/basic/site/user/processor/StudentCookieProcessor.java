@@ -4,10 +4,13 @@ import com.alibaba.fastjson.TypeReference;
 import com.tss.basic.site.response.DefaultResponse;
 import com.tss.basic.site.user.annotation.StudentLoginUser;
 import com.tss.basic.site.user.annotation.StudentUser;
+import com.tss.basic.site.user.annotation.UserAuthInfo;
 import com.tss.basic.site.user.config.UserStudentConfig;
 import com.tss.basic.site.user.item.CookieItem;
 import com.tss.basic.site.user.item.CookieName;
 import com.tss.basic.site.util.HttpManager;
+import com.tss.basic.site.util.LoginHttpManager;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +48,14 @@ public class StudentCookieProcessor extends AbstractCookieProcessor {
     public Object getLoginUserInfo(CookieItem cookieItem, MethodParameter parameter) {
         StudentLoginUser studentLoginUser = parameter.getParameterAnnotation(StudentLoginUser.class);
         if (studentLoginUser != null && studentLoginUser.required() && parameter.getParameterType().equals(StudentUser.class)) {
-            DefaultResponse<StudentUser> response = HttpManager.getLoginUserInfo(studentConfig.getInfoUrl(), cookieItem, type, null);
+            // 用户认证信息
+            UserAuthInfo userAuthInfo = accessTokenProcessor.getLoginUserAuthInfo(cookieItem.getValue());
+            if (userAuthInfo == null || StringUtils.isBlank(userAuthInfo.getUserAcc())) {
+                LOG.info("student user not login, {}", cookieItem);
+                return null;
+            }
+            // 用户基本信息
+            DefaultResponse<StudentUser> response = LoginHttpManager.getLoginUserInfo(studentConfig.getInfoUrl(), userAuthInfo.getUserAcc(), type, null);
             if (response == null || !response.isSuccess() || response.getData() == null) {
                 LOG.info("student user not login, {}", cookieItem);
                 return null;

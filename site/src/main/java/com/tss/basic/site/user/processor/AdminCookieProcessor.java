@@ -1,19 +1,15 @@
-/*
- * Copyright (C) 2017-2018 Qy All rights reserved
- * Author: Liu Tong
- * Date: 2018/12/5
- * Description:AdminCookieProcessor.java
- */
 package com.tss.basic.site.user.processor;
 
 import com.alibaba.fastjson.TypeReference;
 import com.tss.basic.site.response.DefaultResponse;
 import com.tss.basic.site.user.annotation.AdminLoginUser;
 import com.tss.basic.site.user.annotation.AdminUser;
+import com.tss.basic.site.user.annotation.UserAuthInfo;
 import com.tss.basic.site.user.config.AdminUserConfig;
 import com.tss.basic.site.user.item.CookieItem;
 import com.tss.basic.site.user.item.CookieName;
-import com.tss.basic.site.util.HttpManager;
+import com.tss.basic.site.util.LoginHttpManager;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,14 +40,21 @@ public class AdminCookieProcessor extends AbstractCookieProcessor {
 
     @Override
     public String getCookieName() {
-        return CookieName.ADMIN.getCookieName();
+        return CookieName.ACCESS_TOKEN.getCookieName();
     }
 
     @Override
     public Object getLoginUserInfo(CookieItem cookieItem, MethodParameter parameter) {
         AdminLoginUser adminLoginUser = parameter.getParameterAnnotation(AdminLoginUser.class);
         if (adminLoginUser != null && adminLoginUser.required() && parameter.getParameterType().equals(AdminUser.class)) {
-            DefaultResponse<AdminUser> response = HttpManager.getLoginUserInfo(adminUserConfig.getInfoUrl(), cookieItem, type, null);
+            // 用户认证信息
+            UserAuthInfo userAuthInfo = accessTokenProcessor.getLoginUserAuthInfo(cookieItem.getValue());
+            if (userAuthInfo == null || StringUtils.isBlank(userAuthInfo.getUserAcc())) {
+                LOG.info("admin user not login, {}", cookieItem);
+                return null;
+            }
+            // 用户基本信息
+            DefaultResponse<AdminUser> response = LoginHttpManager.getLoginUserInfo(adminUserConfig.getInfoUrl(), userAuthInfo.getUserAcc(), type, null);
             if (response == null || !response.isSuccess() || response.getData() == null) {
                 LOG.info("admin user not login ,{}" + cookieItem);
                 return null;

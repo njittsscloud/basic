@@ -578,29 +578,4 @@ public class HttpManager {
         return null;
     }
 
-    /**
-     * 发起一个HTTP Get请求 获取用户信息
-     */
-    public static <T> DefaultResponse<T> getLoginUserInfo(String url, CookieItem item, Type clazz, HttpCtrl ctrl) {
-        RequestConfig defaultRequestConfig = getRequestConfig(ctrl);
-        HttpGet httpGet = null;
-        try {
-            CloseableHttpClient httpClient = HttpClients.custom().setDefaultRequestConfig(defaultRequestConfig).build();
-            httpGet = new HttpGet(url);
-            setCookie(item, httpGet);
-            CloseableHttpResponse response = httpClient.execute(httpGet);
-            HttpEntity entity = response.getEntity();
-            String responseString = EntityUtils.toString(entity);
-            DefaultResponse<T> baseResponse = decode(responseString, clazz);
-            return baseResponse;
-        } catch (Exception e) {
-            LOGGER.error("get data failed, url: {} , cookie : {}, request: {}.", url, item, e);
-        } finally {
-            if (httpGet != null) {
-                httpGet.abort();
-            }
-        }
-
-        return null;
-    }
 }

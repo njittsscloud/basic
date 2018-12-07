@@ -8,6 +8,9 @@ import org.springframework.core.MethodParameter;
  * @date 2018/11/29
  */
 public abstract class AbstractCookieProcessor {
+    
+    protected AccessTokenProcessor accessTokenProcessor = new AccessTokenProcessor();
+    
     public abstract String getCookieName();
 
     public abstract Object getLoginUserInfo(CookieItem cookieItem, MethodParameter parameter);
