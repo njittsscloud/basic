@@ -62,7 +62,7 @@ public class LoginHttpManager {
         HttpGet httpGet = null;
         try {
             CloseableHttpClient httpClient = HttpClients.custom().setDefaultRequestConfig(defaultRequestConfig).build();
-            httpGet = new HttpGet(url + "/userAcc=" + userAcc);
+            httpGet = new HttpGet(url + "/" + userAcc);
             CloseableHttpResponse response = httpClient.execute(httpGet);
             HttpEntity entity = response.getEntity();
             String responseString = EntityUtils.toString(entity);

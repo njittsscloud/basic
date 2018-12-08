@@ -29,6 +29,8 @@ public class AdminCookieProcessor extends AbstractCookieProcessor {
     private static Logger LOG = LoggerFactory.getLogger(AdminCookieProcessor.class);
 
     @Autowired
+    private AccessTokenProcessor accessTokenProcessor;
+    @Autowired
     AdminUserConfig adminUserConfig;
 
     private static Type type;

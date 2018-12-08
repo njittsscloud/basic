@@ -30,6 +30,8 @@ public class TeacherCookieProcessor extends AbstractCookieProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(TeacherCookieProcessor.class);
 
     @Autowired
+    private AccessTokenProcessor accessTokenProcessor;
+    @Autowired
     private TeacherUserConfig teacherUserConfig;
 
     private static final Type type;

@@ -2,6 +2,7 @@ package com.tss.basic.site.user.processor;
 
 import com.alibaba.fastjson.TypeReference;
 import com.tss.basic.site.response.DefaultResponse;
+import com.tss.basic.site.user.annotation.AdminLoginUser;
 import com.tss.basic.site.user.annotation.StudentLoginUser;
 import com.tss.basic.site.user.annotation.StudentUser;
 import com.tss.basic.site.user.annotation.UserAuthInfo;
@@ -29,6 +30,8 @@ import java.lang.reflect.Type;
 public class StudentCookieProcessor extends AbstractCookieProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(StudentCookieProcessor.class);
 
+    @Autowired
+    private AccessTokenProcessor accessTokenProcessor;
     @Autowired
     private UserStudentConfig studentConfig;
 
