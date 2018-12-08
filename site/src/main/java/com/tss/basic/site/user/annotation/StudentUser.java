@@ -2,11 +2,13 @@ package com.tss.basic.site.user.annotation;
 
 import com.tss.basic.site.user.item.AbstractUser;
 
+import java.io.Serializable;
+
 /**
  * @author MQG
  * @date 2018/12/02
  */
-public class StudentUser extends AbstractUser {
+public class StudentUser extends AbstractUser implements Serializable {
     @Override
     public Integer getUserType() {
         return UserTypeEnum.STUDENT.getValue();
