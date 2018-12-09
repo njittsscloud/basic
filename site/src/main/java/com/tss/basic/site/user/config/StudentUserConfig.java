@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Primary
 @Component
 @ConfigurationProperties(prefix = "user.student")
-public class UserStudentConfig {
+public class StudentUserConfig {
     private String infoUrl = "";
 
     public String getInfoUrl() {

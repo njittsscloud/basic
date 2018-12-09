@@ -29,9 +29,9 @@ public abstract class AbstractUserMethodArgumentResolver implements HandlerMetho
 
     public abstract boolean thrNotLoginException(MethodParameter parameter);
 
-    public static boolean isSessionId(String value) {
-        return sessionPattern.matcher(value).find();
-    }
+//    public static boolean isSessionId(String value) {
+//        return sessionPattern.matcher(value).find();
+//    }
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
@@ -64,7 +64,7 @@ public abstract class AbstractUserMethodArgumentResolver implements HandlerMetho
             }
             return data;
         } catch (Exception e) {
-            LOGGER.warn("fire session 2 user info failed. {}", e.getMessage());
+            LOGGER.warn("convert access_token to user info failed. {}", e.getMessage());
             if (thrNotLoginException(parameter)) {
                 throw new UserNotLoginException();
             }

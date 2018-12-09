@@ -2,14 +2,12 @@ package com.tss.basic.site.user.processor;
 
 import com.alibaba.fastjson.TypeReference;
 import com.tss.basic.site.response.DefaultResponse;
-import com.tss.basic.site.user.annotation.AdminLoginUser;
 import com.tss.basic.site.user.annotation.StudentLoginUser;
 import com.tss.basic.site.user.annotation.StudentUser;
 import com.tss.basic.site.user.annotation.UserAuthInfo;
-import com.tss.basic.site.user.config.UserStudentConfig;
+import com.tss.basic.site.user.config.StudentUserConfig;
 import com.tss.basic.site.user.item.CookieItem;
 import com.tss.basic.site.user.item.CookieName;
-import com.tss.basic.site.util.HttpManager;
 import com.tss.basic.site.util.LoginHttpManager;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -26,14 +24,14 @@ import java.lang.reflect.Type;
  * @date 2018/11/29
  */
 @Configuration
-@EnableConfigurationProperties(UserStudentConfig.class)
+@EnableConfigurationProperties(StudentUserConfig.class)
 public class StudentCookieProcessor extends AbstractCookieProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(StudentCookieProcessor.class);
 
     @Autowired
     private AccessTokenProcessor accessTokenProcessor;
     @Autowired
-    private UserStudentConfig studentConfig;
+    private StudentUserConfig studentConfig;
 
     private static final Type type;
 

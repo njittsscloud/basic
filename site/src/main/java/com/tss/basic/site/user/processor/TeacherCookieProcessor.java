@@ -53,7 +53,7 @@ public class TeacherCookieProcessor extends AbstractCookieProcessor {
             // 用户认证信息
             UserAuthInfo userAuthInfo = accessTokenProcessor.getLoginUserAuthInfo(cookieItem.getValue());
             if (userAuthInfo == null || StringUtils.isBlank(userAuthInfo.getUserAcc())) {
-                LOG.info("admin user not login, {}", cookieItem);
+                LOG.info("teacher user not login, {}", cookieItem);
                 return null;
             }
             // 用户基本信息
