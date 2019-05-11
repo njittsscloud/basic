@@ -7,10 +7,8 @@ import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +16,10 @@ import org.slf4j.LoggerFactory;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URLEncoder;
-import java.util.List;
 
 /**
+ * 用户登录HTTP请求管理器
+ *
  * @author MQG
  * @date 2018/11/29
  */
@@ -50,26 +49,26 @@ public class LoginHttpManager {
 
     /**
      * Get请求 获取用户基本信息
-     * 
-     * @param url 
-     * @param userAcc
+     *
+     * @param url
+     * @param sessionCookie
      * @param clazz
      * @param ctrl
      * @return
      */
-    public static <T> DefaultResponse<T> getLoginUserInfo(String url, String userAcc, Type clazz, HttpCtrl ctrl) {
+    public static <T> DefaultResponse<T> getLoginUserInfo(String url, CookieItem sessionCookie, Type clazz, HttpCtrl ctrl) {
         RequestConfig defaultRequestConfig = getRequestConfig(ctrl);
         HttpGet httpGet = null;
         try {
             CloseableHttpClient httpClient = HttpClients.custom().setDefaultRequestConfig(defaultRequestConfig).build();
-            httpGet = new HttpGet(url + "/" + userAcc);
+            httpGet = new HttpGet(url + "/" + sessionCookie.getValue());
             CloseableHttpResponse response = httpClient.execute(httpGet);
             HttpEntity entity = response.getEntity();
             String responseString = EntityUtils.toString(entity);
             DefaultResponse<T> baseResponse = decode(responseString, clazz);
             return baseResponse;
         } catch (Exception e) {
-            LOGGER.error("get data failed, url: {} , userAcc : {}, request: {}.", url, userAcc, e);
+            LOGGER.error("get data failed, url: {} , cookie : {}, request: {}.", url, sessionCookie.getValue(), e);
         } finally {
             if (httpGet != null) {
                 httpGet.abort();
@@ -78,33 +77,4 @@ public class LoginHttpManager {
         return null;
     }
 
-    /**
-     * Get请求 根据access_token获取用户基本信息
-     *
-     * @param url
-     * @param access_token
-     * @param clazz
-     * @param ctrl
-     * @return
-     */
-    public static <T> DefaultResponse<T> getLoginUserAuthInfo(String url, String access_token, Type clazz, HttpCtrl ctrl) {
-        RequestConfig defaultRequestConfig = getRequestConfig(ctrl);
-        HttpGet httpGet = null;
-        try {
-            CloseableHttpClient httpClient = HttpClients.custom().setDefaultRequestConfig(defaultRequestConfig).build();
-            httpGet = new HttpGet(url + "?access_token=" + access_token);
-            CloseableHttpResponse response = httpClient.execute(httpGet);
-            HttpEntity entity = response.getEntity();
-            String responseString = EntityUtils.toString(entity);
-            DefaultResponse<T> baseResponse = decode(responseString, clazz);
-            return baseResponse;
-        } catch (Exception e) {
-            LOGGER.error("get data failed, url={} , access_token={}, request={}.", url, access_token, e);
-        } finally {
-            if (httpGet != null) {
-                httpGet.abort();
-            }
-        }
-        return null;
-    }
 }

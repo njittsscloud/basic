@@ -4,6 +4,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.tss.basic.site.response.DefaultResponse;
 import com.tss.basic.site.user.annotation.AdminLoginUser;
 import com.tss.basic.site.user.annotation.AdminUser;
+import com.tss.basic.site.user.annotation.TeacherUser;
 import com.tss.basic.site.user.annotation.UserAuthInfo;
 import com.tss.basic.site.user.config.AdminUserConfig;
 import com.tss.basic.site.user.item.CookieItem;
@@ -25,11 +26,8 @@ import java.lang.reflect.Type;
 @Configuration
 @EnableConfigurationProperties(AdminUserConfig.class)
 public class AdminCookieProcessor extends AbstractCookieProcessor {
-
     private static Logger LOG = LoggerFactory.getLogger(AdminCookieProcessor.class);
 
-    @Autowired
-    private AccessTokenProcessor accessTokenProcessor;
     @Autowired
     AdminUserConfig adminUserConfig;
 
@@ -42,7 +40,7 @@ public class AdminCookieProcessor extends AbstractCookieProcessor {
 
     @Override
     public String getCookieName() {
-        return CookieName.ACCESS_TOKEN.getCookieName();
+        return CookieName.ADMIN.getCookieName();
     }
 
     @Override
@@ -50,13 +48,7 @@ public class AdminCookieProcessor extends AbstractCookieProcessor {
         AdminLoginUser adminLoginUser = parameter.getParameterAnnotation(AdminLoginUser.class);
         if (adminLoginUser != null && adminLoginUser.required() && parameter.getParameterType().equals(AdminUser.class)) {
             // 用户认证信息
-            UserAuthInfo userAuthInfo = accessTokenProcessor.getLoginUserAuthInfo(cookieItem.getValue());
-            if (userAuthInfo == null || StringUtils.isBlank(userAuthInfo.getUserAcc())) {
-                LOG.info("admin user not login, {}", cookieItem);
-                return null;
-            }
-            // 用户基本信息
-            DefaultResponse<AdminUser> response = LoginHttpManager.getLoginUserInfo(adminUserConfig.getInfoUrl(), userAuthInfo.getUserAcc(), type, null);
+            DefaultResponse<TeacherUser> response = LoginHttpManager.getLoginUserInfo(adminUserConfig.getInfoUrl(), cookieItem, type, null);
             if (response == null || !response.isSuccess() || response.getData() == null) {
                 LOG.info("admin user not login ,{}" + cookieItem);
                 return null;
