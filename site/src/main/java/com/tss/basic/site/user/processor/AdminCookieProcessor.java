@@ -4,13 +4,10 @@ import com.alibaba.fastjson.TypeReference;
 import com.tss.basic.site.response.DefaultResponse;
 import com.tss.basic.site.user.annotation.AdminLoginUser;
 import com.tss.basic.site.user.annotation.AdminUser;
-import com.tss.basic.site.user.annotation.TeacherUser;
-import com.tss.basic.site.user.annotation.UserAuthInfo;
 import com.tss.basic.site.user.config.AdminUserConfig;
 import com.tss.basic.site.user.item.CookieItem;
 import com.tss.basic.site.user.item.CookieName;
 import com.tss.basic.site.util.LoginHttpManager;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +45,7 @@ public class AdminCookieProcessor extends AbstractCookieProcessor {
         AdminLoginUser adminLoginUser = parameter.getParameterAnnotation(AdminLoginUser.class);
         if (adminLoginUser != null && adminLoginUser.required() && parameter.getParameterType().equals(AdminUser.class)) {
             // 用户认证信息
-            DefaultResponse<TeacherUser> response = LoginHttpManager.getLoginUserInfo(adminUserConfig.getInfoUrl(), cookieItem, type, null);
+            DefaultResponse<AdminUser> response = LoginHttpManager.getLoginUserInfo(adminUserConfig.getInfoUrl(), cookieItem, type, null);
             if (response == null || !response.isSuccess() || response.getData() == null) {
                 LOG.info("admin user not login ,{}" + cookieItem);
                 return null;

@@ -4,7 +4,6 @@ import com.alibaba.fastjson.TypeReference;
 import com.tss.basic.site.response.DefaultResponse;
 import com.tss.basic.site.user.annotation.StudentLoginUser;
 import com.tss.basic.site.user.annotation.StudentUser;
-import com.tss.basic.site.user.annotation.TeacherUser;
 import com.tss.basic.site.user.config.StudentUserConfig;
 import com.tss.basic.site.user.item.CookieItem;
 import com.tss.basic.site.user.item.CookieName;
@@ -47,7 +46,7 @@ public class StudentCookieProcessor extends AbstractCookieProcessor {
         StudentLoginUser studentLoginUser = parameter.getParameterAnnotation(StudentLoginUser.class);
         if (studentLoginUser != null && studentLoginUser.required() && parameter.getParameterType().equals(StudentUser.class)) {
             // 用户认证信息
-            DefaultResponse<TeacherUser> response = LoginHttpManager.getLoginUserInfo(studentUserConfig.getInfoUrl(), cookieItem, type, null);
+            DefaultResponse<StudentUser> response = LoginHttpManager.getLoginUserInfo(studentUserConfig.getInfoUrl(), cookieItem, type, null);
             if (response == null || !response.isSuccess() || response.getData() == null) {
                 LOG.info("student user not login, {}", cookieItem);
                 return null;
